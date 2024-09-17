@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Clicker Spiel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        #cookie {
+            width: 200px;
+            height: 200px;
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/e0/Golden_cookie.png');
+            background-size: cover;
+            cursor: pointer;
+            margin: 50px auto;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        #counter {
+            font-size: 2em;
+            margin: 20px;
+        }
+        #shop {
+            margin: 30px auto;
+            width: 300px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        .item {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #eee;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .item:hover {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="cookie"></div>
+    <div id="counter">0 Kekse</div>
+
+    <div id="shop">
+        <h2>Shop</h2>
+        <div class="item" id="upgradeClick">
+            <span>Upgrade: +1 pro Klick (Kosten: <span id="upgradeClickCost">50</span> Kekse)</span>
+            <span id="upgradeClickCount">0x gekauft</span>
+        </div>
+        <div class="item" id="autoClicker">
+            <span>Auto-Klicker (Kosten: <span id="autoClickerCost">100</span> Kekse)</span>
+            <span id="autoClickerCount">0x gekauft</span>
+        </div>
+    </div>
+
+    <script>
+        let cookies = 0;
+        let clickPower = 1;
+        let autoClickers = 0;
+
+        let upgradeClickCost = 50;
+        let autoClickerCost = 100;
+
+        const cookie = document.getElementById('cookie');
+        const counter = document.getElementById('counter');
+
+        const upgradeClickButton = document.getElementById('upgradeClick');
+        const autoClickerButton = document.getElementById('autoClicker');
+
+        const upgradeClickCostText = document.getElementById('upgradeClickCost');
+        const upgradeClickCountText = document.getElementById('upgradeClickCount');
+
+        const autoClickerCostText = document.getElementById('autoClickerCost');
+        const autoClickerCountText = document.getElementById('autoClickerCount');
+
+        // Cookie-Klick-Event
+        cookie.addEventListener('click', () => {
+            cookies += clickPower;
+            updateCounter();
+        });
+
+        // Upgrade für mehr Cookies pro Klick
+        upgradeClickButton.addEventListener('click', () => {
+            if (cookies >= upgradeClickCost) {
+                cookies -= upgradeClickCost;
+                clickPower += 1;
+                upgradeClickCost = Math.floor(upgradeClickCost * 1.5);
+                upgradeClickCostText.textContent = upgradeClickCost;
+                updateCounter();
+                upgradeClickCountText.textContent = `${clickPower - 1}x gekauft`;
+            }
+        });
+
+        // Auto-Klicker kaufen
+        autoClickerButton.addEventListener('click', () => {
+            if (cookies >= autoClickerCost) {
+                cookies -= autoClickerCost;
+                autoClickers += 1;
+                autoClickerCost = Math.floor(autoClickerCost * 1.5);
+                autoClickerCostText.textContent = autoClickerCost;
+                updateCounter();
+                autoClickerCountText.textContent = `${autoClickers}x gekauft`;
+            }
+        });
+
+        // Auto-Klicker automatisch Kekse hinzufügen
+        setInterval(() => {
+            cookies += autoClickers;
+            updateCounter();
+        }, 1000);
+
+        // Zähler aktualisieren
+        function updateCounter() {
+            counter.textContent = `${cookies} Kekse`;
+        }
+    </script>
+
+</body>
+</html>
